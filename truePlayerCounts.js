@@ -169,6 +169,10 @@ BBLog.handle("add.plugin", {
     },
 });
 
+$( document ).ready(function() {
+    S.globalContext.staticContext.keeperQueryEndpoint = "https://keeper.battlelog.com"
+});
+
 // Create a closure
 (function () {
     // Your base, I'm in it!
