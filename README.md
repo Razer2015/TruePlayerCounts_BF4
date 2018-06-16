@@ -11,6 +11,9 @@ Version 2.1: https://cdn.rawgit.com/Razer2015/TruePlayerCounts_BF4/2.1/truePlaye
 
 # Changelog
 ```
+Version: 2.1
+- Fix: Stop excessive request flooding (hopefully :))
+- Fix: Fix match info and scoreboard on battlelog (Thanks DICE for breaking them). And thanks PolloLoco for pointing out that https works even though http doesn't
 Version: 2.0
 - Change: Fetch data from another place (Code refactored quite drastically as well)
 Version: 1.3.1
