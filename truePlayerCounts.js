@@ -4,7 +4,7 @@
 * Used I-MrFixIt-I's Friends Highlighter as a base.
 * 
 * @author xfileFIN
-* @version 2.0
+* @version 2.1
 * @url https://getbblog.com
 */
 
@@ -12,6 +12,9 @@
 /* Changelog */
 /*************/
 /*
+Version: 2.1
+- Fix: Stop excessive request flooding (hopefully :))
+- Fix: Fix match info and scoreboard on battlelog (Thanks DICE for breaking them). And thanks PolloLoco for pointing out that https works even though http doesn't
 Version: 2.0
 - Change: Fetch data from another place
 Version: 1.4
@@ -161,6 +164,8 @@ BBLog.handle("add.plugin", {
     */
     domchange: function (instance) {
         instanssi = instance;
+
+        S.globalContext.staticContext.keeperQueryEndpoint = "https://keeper.battlelog.com"
     },
 });
 
@@ -170,8 +175,15 @@ BBLog.handle("add.plugin", {
     var originalAddClassMethod = jQuery.fn.addClass;
 
     jQuery.fn.addClass = function () {
+        if(jQuery.inArray("loading-info", arguments) !== -1){
+            if (this.hasClass("bblog-serverbrowser-filters")) {
+                this.removeClass("bblog-serverbrowser-filters");
+            }
+        }
         if(jQuery.inArray("bblog-serverbrowser-filters", arguments) !== -1){
-            doTheMagic(this);
+            if (!this.hasClass("bblog-serverbrowser-filters")) {
+                doTheMagic(this);
+            }
         }
 
         // Execute the original method.
@@ -207,15 +219,20 @@ function doTheMagic(row){
             var slotData = response.message.SERVER_INFO.slots;
             var totalPlayers = response.message.SERVER_PLAYERS.length;
 
-            if (slotData[2] && !$serverRow.find(".bblog-slots.trueplayercount").length) {
-                if ($serverRow.find(".bblog-slots.commander").length) {
-                    $serverRow.find(".bblog-slots.commander").before('<div class="bblog-slots trueplayercount">' + totalPlayers + "/" + slotData[2].max + '</div>');
+            if (slotData[2]) {
+                if (!$serverRow.find(".bblog-slots.trueplayercount").length) {
+                    if ($serverRow.find(".bblog-slots.commander").length) {
+                        $serverRow.find(".bblog-slots.commander").before('<div class="bblog-slots trueplayercount">' + totalPlayers + "/" + slotData[2].max + '</div>');
+                    }
+                    else if ($serverRow.find(".bblog-slots.spectator").length) {
+                        $serverRow.find(".bblog-slots.spectator").before('<div class="bblog-slots trueplayercount">' + totalPlayers + "/" + slotData[2].max + '</div>');
+                    }
+                    else {
+                        $serverRow.find("td.players").append('<div class="bblog-slots trueplayercount">' + totalPlayers + "/" + slotData[2].max + '</div>');
+                    }
                 }
-                else if ($serverRow.find(".bblog-slots.spectator").length) {
-                    $serverRow.find(".bblog-slots.spectator").before('<div class="bblog-slots trueplayercount">' + totalPlayers + "/" + slotData[2].max + '</div>');
-                }
-                else {
-                    $serverRow.find("td.players").append('<div class="bblog-slots trueplayercount">' + totalPlayers + "/" + slotData[2].max + '</div>');
+                else{
+                    $serverRow.find(".bblog-slots.trueplayercount").html('<div class="bblog-slots trueplayercount">' + totalPlayers + "/" + slotData[2].max + '</div>');
                 }
                 var serverplayers = $serverRow.find(".bblog-slots.trueplayercount");
 
