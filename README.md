@@ -32,6 +32,10 @@ Version: 1.1
 Version: 1.0
 - Initial release
 ```
+# Alternatives
+If you don't want to install this plugin but want to get battlelog fixed, here is the Battlelog keeper fixer
+https://greasyfork.org/en/scripts/369636-battlelog-keeper-fixer
+
 # Previews
 ![serverbrowser](https://user-images.githubusercontent.com/10619845/41501559-9d87c622-71af-11e8-803d-c25c891ee4e9.PNG)
 
