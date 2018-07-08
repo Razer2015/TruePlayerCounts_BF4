@@ -215,28 +215,38 @@ function doTheMagic(row){
 
     // True player count
     var url = "http://battlelog.battlefield.com/bf4/servers/show/pc/" + data.guid + "?json=1";
+    var url2 = "https://keeper.battlelog.com/snapshot/" + data.guid;
 
     var $serverRow = $(row);
-    function showTrueCounts(response) {
+    function showTrueCounts(response, keeper) {
         if (response.type == "success" && response.message.SERVER_INFO && response.message.SERVER_PLAYERS) {
             //console.log("Current: " + response.message.SERVER_INFO.slots[2].max + "/" + response.message.SERVER_PLAYERS.length);
             var slotData = response.message.SERVER_INFO.slots;
             var totalPlayers = response.message.SERVER_PLAYERS.length;
 
+            var playingCount = 0;
+            
+            var teamInfos = keeper.snapshot.teamInfo;
+            playingCount += (["0"] in teamInfos ? BBLog.count(teamInfos["0"].players) : 0);
+            playingCount += (["1"] in teamInfos ? BBLog.count(teamInfos["1"].players) : 0);
+            playingCount += (["2"] in teamInfos ? BBLog.count(teamInfos["2"].players) : 0);
+            playingCount += (["3"] in teamInfos ? BBLog.count(teamInfos["3"].players) : 0);
+            playingCount += (["4"] in teamInfos ? BBLog.count(teamInfos["4"].players) : 0);
+
             if (slotData[2]) {
                 if (!$serverRow.find(".bblog-slots.trueplayercount").length) {
                     if ($serverRow.find(".bblog-slots.commander").length) {
-                        $serverRow.find(".bblog-slots.commander").before('<div class="bblog-slots trueplayercount">' + totalPlayers + "/" + slotData[2].max + '</div>');
+                        $serverRow.find(".bblog-slots.commander").before('<div class="bblog-slots trueplayercount">' + totalPlayers + "/" + slotData[2].max + " (" + playingCount + ")" + '</div>');
                     }
                     else if ($serverRow.find(".bblog-slots.spectator").length) {
-                        $serverRow.find(".bblog-slots.spectator").before('<div class="bblog-slots trueplayercount">' + totalPlayers + "/" + slotData[2].max + '</div>');
+                        $serverRow.find(".bblog-slots.spectator").before('<div class="bblog-slots trueplayercount">' + totalPlayers + "/" + slotData[2].max + " (" + playingCount + ")" + '</div>');
                     }
                     else {
-                        $serverRow.find("td.players").append('<div class="bblog-slots trueplayercount">' + totalPlayers + "/" + slotData[2].max + '</div>');
+                        $serverRow.find("td.players").append('<div class="bblog-slots trueplayercount">' + totalPlayers + "/" + slotData[2].max + "(" + playingCount + ")" + '</div>');
                     }
                 }
                 else{
-                    $serverRow.find(".bblog-slots.trueplayercount").html('<div class="bblog-slots trueplayercount">' + totalPlayers + "/" + slotData[2].max + '</div>');
+                    $serverRow.find(".bblog-slots.trueplayercount").html('<div class="bblog-slots trueplayercount">' + totalPlayers + "/" + slotData[2].max + " (" + playingCount + ")" + '</div>');
                 }
                 var serverplayers = $serverRow.find(".bblog-slots.trueplayercount");
 
@@ -299,18 +309,34 @@ function doTheMagic(row){
     }
 
     // Fetch the current data
-    $.ajax({
-        async: true,
-        url: url,
-        error: function () {
-            //console.log("Fetching: " + url + " timed out.");
-        },
-        success: function (result) {
-            //console.log(result);
-            if (result) {
-                showTrueCounts(result);
-            }
-        },
-        timeout: 5000 // sets timeout to 5 seconds
+    var result1;
+    var result2;
+    $.when(
+        $.ajax({
+            async: true,
+            url: url,
+            error: function () {
+                //console.log("Fetching: " + url + " timed out.");
+            },
+            success: function (result) {
+                result1 = result;
+            },
+            timeout: 5000 // sets timeout to 5 seconds
+        }),
+    
+        $.ajax({
+            async: true,
+            url: url2,
+            error: function () {
+                //console.log("Fetching: " + url + " timed out.");
+            },
+            success: function (result) {
+                result2 = result;
+            },
+            timeout: 5000 // sets timeout to 5 seconds
+        })
+    
+    ).then(function() {
+        showTrueCounts(result1, result2);
     });
 }
