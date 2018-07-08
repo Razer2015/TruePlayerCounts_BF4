@@ -10,6 +10,7 @@ https://cdn.rawgit.com/Razer2015/TruePlayerCounts_BF4/master/truePlayerCounts.js
 
 #### Specific version
 Version 2.2: https://cdn.rawgit.com/Razer2015/TruePlayerCounts_BF4/2.2/truePlayerCounts.js
+
 Version 2.1: https://cdn.rawgit.com/Razer2015/TruePlayerCounts_BF4/2.1/truePlayerCounts.js
 
 ![pluginsadding](https://user-images.githubusercontent.com/10619845/41501560-a30118ec-71af-11e8-896b-61d06846e489.PNG)
