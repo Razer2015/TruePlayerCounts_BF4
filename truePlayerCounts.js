@@ -4,7 +4,7 @@
 * Used I-MrFixIt-I's Friends Highlighter as a base.
 * 
 * @author xfileFIN
-* @version 2.1
+* @version 2.2
 * @url https://getbblog.com
 */
 
@@ -12,6 +12,8 @@
 /* Changelog */
 /*************/
 /*
+Version: 2.2
+- Fix: Reverted back to using keeper instead of serverbrowserwarsaw
 Version: 2.1
 - Fix: Stop excessive request flooding (hopefully :))
 - Fix: Fix match info and scoreboard on battlelog (Thanks DICE for breaking them). And thanks PolloLoco for pointing out that https works even though http doesn't
@@ -173,6 +175,7 @@ $( document ).ready(function() {
     S.globalContext.staticContext.keeperQueryEndpoint = "https://keeper.battlelog.com"
 });
 
+// https://stackoverflow.com/a/14084869
 // Create a closure
 (function () {
     // Your base, I'm in it!
@@ -214,33 +217,39 @@ function doTheMagic(row){
     if (!data) return true;
 
     // True player count
-    var url = "http://battlelog.battlefield.com/bf4/servers/show/pc/" + data.guid + "?json=1";
+    var url = "https://keeper.battlelog.com/snapshot/" + data.guid;
 
     var $serverRow = $(row);
     function showTrueCounts(response) {
-        if (response.type == "success" && response.message.SERVER_INFO && response.message.SERVER_PLAYERS) {
-            //console.log("Current: " + response.message.SERVER_INFO.slots[2].max + "/" + response.message.SERVER_PLAYERS.length);
-            var slotData = response.message.SERVER_INFO.slots;
-            var totalPlayers = response.message.SERVER_PLAYERS.length;
+        if (response.snapshot.status == "SUCCESS") {
+            var totalPlayers = 0;
 
-            if (slotData[2]) {
+            var snapshot = response.snapshot;
+            var teamInfos = snapshot.teamInfo;
+            totalPlayers += (["0"] in teamInfos ? BBLog.count(teamInfos["0"].players) : 0);
+            totalPlayers += (["1"] in teamInfos ? BBLog.count(teamInfos["1"].players) : 0);
+            totalPlayers += (["2"] in teamInfos ? BBLog.count(teamInfos["2"].players) : 0);
+            totalPlayers += (["3"] in teamInfos ? BBLog.count(teamInfos["3"].players) : 0);
+            totalPlayers += (["4"] in teamInfos ? BBLog.count(teamInfos["4"].players) : 0);
+
+            if (data.slots[2]) {
                 if (!$serverRow.find(".bblog-slots.trueplayercount").length) {
                     if ($serverRow.find(".bblog-slots.commander").length) {
-                        $serverRow.find(".bblog-slots.commander").before('<div class="bblog-slots trueplayercount">' + totalPlayers + "/" + slotData[2].max + '</div>');
+                        $serverRow.find(".bblog-slots.commander").before('<div class="bblog-slots trueplayercount">' + totalPlayers + "/" + data.slots[2].max + '</div>');
                     }
                     else if ($serverRow.find(".bblog-slots.spectator").length) {
-                        $serverRow.find(".bblog-slots.spectator").before('<div class="bblog-slots trueplayercount">' + totalPlayers + "/" + slotData[2].max + '</div>');
+                        $serverRow.find(".bblog-slots.spectator").before('<div class="bblog-slots trueplayercount">' + totalPlayers + "/" + data.slots[2].max + '</div>');
                     }
                     else {
-                        $serverRow.find("td.players").append('<div class="bblog-slots trueplayercount">' + totalPlayers + "/" + slotData[2].max + '</div>');
+                        $serverRow.find("td.players").append('<div class="bblog-slots trueplayercount">' + totalPlayers + "/" + data.slots[2].max + '</div>');
                     }
                 }
                 else{
-                    $serverRow.find(".bblog-slots.trueplayercount").html('<div class="bblog-slots trueplayercount">' + totalPlayers + "/" + slotData[2].max + '</div>');
+                    $serverRow.find(".bblog-slots.trueplayercount").html('<div class="bblog-slots trueplayercount">' + totalPlayers + "/" + data.slots[2].max + '</div>');
                 }
                 var serverplayers = $serverRow.find(".bblog-slots.trueplayercount");
 
-                var difference = Math.abs(slotData[2].current - totalPlayers);
+                var difference = Math.abs(data.slots[2].current - totalPlayers);
                 if (difference <= 2) {
                     if (instanssi.storage("change-color-low")) {
                         var color = instanssi.storage("colorLow");
@@ -288,10 +297,10 @@ function doTheMagic(row){
 
             // Remove the unneeded nodes to make the view a bit nicer/cleaner
             if (instanssi.storage("use.trim-view")) {
-                if (slotData[4] && $serverRow.find(".bblog-slots.commander").length && slotData[4].current <= 0) {
+                if (data.slots[4] && $serverRow.find(".bblog-slots.commander").length && data.slots[4].current <= 0) {
                     $serverRow.find(".bblog-slots.commander").css("display", "none");
                 }
-                if (slotData[8] && $serverRow.find(".bblog-slots.spectator").length && slotData[8].current <= 0) {
+                if (data.slots[8] && $serverRow.find(".bblog-slots.spectator").length && data.slots[8].current <= 0) {
                     $serverRow.find(".bblog-slots.spectator").css("display", "none");
                 }
             }
