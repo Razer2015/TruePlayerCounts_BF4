@@ -12,6 +12,8 @@
 /* Changelog */
 /*************/
 /*
+Version: 2.3
+- Added: Support sorting server list by true player count (contributor: https://github.com/taskula)
 Version: 2.2
 - Fix: Reverted back to using keeper instead of serverbrowserwarsaw
 Version: 2.1
@@ -293,6 +295,11 @@ function doTheMagic(row){
                     }
                 }
                 $(serverplayers).css("font-size", "12px");
+                
+                // Replace current with totalPlayers and re-sort server table.
+                // Enables sorting by true player count.
+                data.slots[2].current = totalPlayers;
+                serverbrowserwarsaw.sorter.refresh();
             }
 
             // Remove the unneeded nodes to make the view a bit nicer/cleaner
