@@ -4,7 +4,7 @@
 * Used I-MrFixIt-I's Friends Highlighter as a base.
 * 
 * @author xfileFIN
-* @version 2.2
+* @version 2.3
 * @url https://getbblog.com
 */
 
