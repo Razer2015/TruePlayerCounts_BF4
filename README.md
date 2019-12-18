@@ -1,5 +1,9 @@
 # Battlefield 4 True Player Counts (BBLog plugin)
 
+## Get the BBLog plugin for Chrome from here (includes the HTTPS fix where the plugin stopped working):
+https://github.com/Razer2015/better-battlelog/releases/tag/4.9.3
+
+### Instructions
 1. Make sure you have **More Sorts and Information in Serverbrowser** enabled from under Battlefield 4
 ![MoreSortsAndInfo](https://cdn.discordapp.com/attachments/269780858272088064/457632486172655627/unknown.png)
 
