@@ -4,7 +4,7 @@
 * Used I-MrFixIt-I's Friends Highlighter as a base.
 * 
 * @author xfileFIN
-* @version 2.3
+* @version 2.4
 * @url https://getbblog.com
 */
 
@@ -12,6 +12,8 @@
 /* Changelog */
 /*************/
 /*
+Version: 2.4
+- Added: Check if the trueplayercount from BBLog fix is enabled. (Russao)
 Version: 2.3
 - Added: Support sorting server list by true player count (contributor: https://github.com/taskula)
 Version: 2.2
@@ -211,7 +213,8 @@ function doTheMagic(row){
         return;
     }
 
-    if (BBLog.cache("mode") != "bf4" || !serverbrowserwarsaw || !serverbrowserwarsaw.table) {
+    let tpcison = BBLog.storage("bf4.serverbrowser.truecounts"); // check if auto trueplayercounts is enabled, if its return.
+    if (BBLog.cache("mode") != "bf4" || !serverbrowserwarsaw || !serverbrowserwarsaw.table || tpcison == 1) {
         return;
     }
 

@@ -1,8 +1,15 @@
 # Battlefield 4 True Player Counts (BBLog plugin)
 
-## Get the BBLog plugin for Chrome from here (includes the HTTPS fix where the plugin stopped working):
-https://github.com/Razer2015/better-battlelog/releases/tag/4.9.3
+## New version of Better Battlelog plugin with enhanced version of this plugin (preferred)
+### Chrome
+Plugin: https://chrome.google.com/webstore/detail/better-battlelog-fixbblog/ncopbeadajoekpedjllcakdmbmgnfgph  
+Source: https://github.com/Razer2015/better-battlelog/tree/master/extensions/chrome
 
+### FireFox
+Plugin: https://addons.mozilla.org/en-US/firefox/addon/better-battlelog-fix-bblog/  
+Source: https://github.com/Razer2015/better-battlelog/tree/master/extensions/firefox
+
+## With older version of Better Battlelog
 ### Instructions
 1. Make sure you have **More Sorts and Information in Serverbrowser** enabled from under Battlefield 4
 ![MoreSortsAndInfo](https://cdn.discordapp.com/attachments/269780858272088064/457632486172655627/unknown.png)
@@ -10,17 +17,23 @@ https://github.com/Razer2015/better-battlelog/releases/tag/4.9.3
 2. Add the plugin with one of the following methods.
 
 #### Always latest (cdn might be updated slowly though)
-https://cdn.rawgit.com/Razer2015/TruePlayerCounts_BF4/master/truePlayerCounts.js
+https://cdn.jsdelivr.net/gh/Razer2015/TruePlayerCounts_BF4@master/truePlayerCounts.js
 
 #### Specific version
-Version 2.3: https://cdn.rawgit.com/Razer2015/TruePlayerCounts_BF4/2.3/truePlayerCounts.js
+Version 2.4: https://cdn.jsdelivr.net/gh/Razer2015/TruePlayerCounts_BF4@2.4/truePlayerCounts.js
 
-Version 2.2: https://cdn.rawgit.com/Razer2015/TruePlayerCounts_BF4/2.2/truePlayerCounts.js
+Version 2.3: https://cdn.jsdelivr.net/gh/Razer2015/TruePlayerCounts_BF4@2.3/truePlayerCounts.js
+
+Version 2.2: https://cdn.jsdelivr.net/gh/Razer2015/TruePlayerCounts_BF4@2.2/truePlayerCounts.js
+
+Version 2.1: https://cdn.jsdelivr.net/gh/Razer2015/TruePlayerCounts_BF4@2.1/truePlayerCounts.js
 
 ![pluginsadding](https://user-images.githubusercontent.com/10619845/41501560-a30118ec-71af-11e8-896b-61d06846e489.PNG)
 
 # Changelog
 ```
+Version: 2.4
+- Added: Check if the trueplayercount from BBLog fix is enabled. (Russao)
 Version: 2.3
 - Added: Support sorting server list by true player count (contributor: https://github.com/taskula)
 Version: 2.2
